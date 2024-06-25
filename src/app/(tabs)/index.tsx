@@ -8,6 +8,8 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       <FlatList
         data={tracks}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <TrackListItem track={item} />}
       />
     </View>
@@ -15,11 +17,7 @@ export default function TabOneScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  container: {},
   title: {
     fontSize: 20,
     fontWeight: "bold",
