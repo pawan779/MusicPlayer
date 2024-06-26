@@ -35,7 +35,7 @@ const makeStyles = (colors: any) =>
     title: {
       color: colors.text,
       fontWeight: "500",
-      fontSize: 16,
+      fontSize: 15,
     },
     subTitle: {
       color: colors.subTitle,

@@ -1,28 +1,23 @@
-import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "@/src/components/EditScreenInfo";
+import { FlatList, StyleSheet } from "react-native";
 import { Text, View } from "@/src/components/Themed";
+import { tracks } from "@/assets/data/tracks";
+import TrackListItem from "@/src/components/TrackListItem";
 
-export default function TabTwoScreen() {
+export default function FavouritesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <FlatList
+        data={tracks}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <TrackListItem track={item} />}
       />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  container: {},
   title: {
     fontSize: 20,
     fontWeight: "bold",

@@ -49,7 +49,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="search"
         options={{
           title: "Search",
           headerShown: false,

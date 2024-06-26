@@ -9,7 +9,9 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
     subTitle: "#afafaf",
+    searchBackground: "#eee",
   },
+
   dark: {
     text: "#fff",
     background: "#000",
@@ -17,5 +19,6 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
     subTitle: "#ccc",
+    searchBackground: "#121314",
   },
 };
