@@ -52,6 +52,7 @@ const Player = () => {
 
   useEffect(() => {
     playTrack();
+    Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
   }, [track]);
 
   if (!track) {
