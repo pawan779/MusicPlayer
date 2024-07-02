@@ -1,16 +1,18 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { tracks } from "../../assets/data/tracks";
 import { usePlayerContext } from "../providers/PlayerProvider";
 import { useEffect, useState } from "react";
 import { AVPlaybackStatus, Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
+import FullScreenPlayer from "./FullScreenPlayer";
 const track = tracks[0];
 
 const Player = () => {
   const { track } = usePlayerContext();
   const [sound, setSound] = useState<Sound>();
   const [isPlaying, setIsPlaying] = useState<Boolean>(false);
+  const [showFullScreen, setShowFullScreen] = useState<Boolean>(true);
 
   const onPlayPause = async () => {
     if (!sound) {
@@ -53,6 +55,7 @@ const Player = () => {
   useEffect(() => {
     playTrack();
     Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+    setShowFullScreen(true);
   }, [track]);
 
   if (!track) {
@@ -61,30 +64,46 @@ const Player = () => {
 
   const image = track.album.images?.[1];
 
+  const onPlayerPress = () => {
+    setShowFullScreen(!showFullScreen);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.player}>
-        {image && <Image source={{ uri: image.url }} style={styles.image} />}
+    <View
+      style={{
+        position: showFullScreen ? "relative" : "absolute",
+        width: "100%",
+        top: showFullScreen ? 0 : -75,
+        height: showFullScreen ? "100%" : 75,
+        padding: showFullScreen ? 0 : 10,
+      }}
+    >
+      {showFullScreen ? (
+        <FullScreenPlayer track={track} onPlayerPress={onPlayerPress} />
+      ) : (
+        <Pressable style={styles.player} onPress={onPlayerPress}>
+          {image && <Image source={{ uri: image.url }} style={styles.image} />}
 
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>{track.name}</Text>
-          <Text style={styles.subtitle}>{track.artists[0]?.name}</Text>
-        </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.title}>{track.name}</Text>
+            <Text style={styles.subtitle}>{track.artists[0]?.name}</Text>
+          </View>
 
-        <Ionicons
-          name={"heart-outline"}
-          size={20}
-          color={"white"}
-          style={{ marginHorizontal: 10 }}
-        />
-        <Ionicons
-          onPress={onPlayPause}
-          disabled={!track?.preview_url}
-          name={isPlaying ? "pause" : "play"}
-          size={22}
-          color={track?.preview_url ? "white" : "gray"}
-        />
-      </View>
+          <Ionicons
+            name={"heart-outline"}
+            size={20}
+            color={"white"}
+            style={{ marginHorizontal: 10 }}
+          />
+          <Ionicons
+            onPress={onPlayPause}
+            disabled={!track?.preview_url}
+            name={isPlaying ? "pause" : "play"}
+            size={22}
+            color={track?.preview_url ? "white" : "gray"}
+          />
+        </Pressable>
+      )}
     </View>
   );
 };
