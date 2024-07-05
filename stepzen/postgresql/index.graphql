@@ -2,8 +2,12 @@ type Favorites {
   id: ID!
   trackid: String
   userid: String
+  track: TrackResponse
+    @materializer(
+      query: "getTrack"
+      arguments: [{ name: "trackId", field: "trackid" }]
+    )
 }
-
 """
 The following queries are just a set of examples of how to access your schema.
 Feel free to modify them or aggregate more.
@@ -24,7 +28,7 @@ type Query {
       table: "favorites"
       configuration: "postgresql_config"
     )
-  favoritesBydUserid(userid: String!): [Favorites]
+  favoritesByUserid(userid: String!): [Favorites]
     @dbquery(
       type: "postgresql"
       schema: "public"
