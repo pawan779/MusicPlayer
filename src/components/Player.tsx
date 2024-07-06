@@ -6,13 +6,82 @@ import { useEffect, useState } from "react";
 import { AVPlaybackStatus, Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
 import FullScreenPlayer from "./FullScreenPlayer";
+import { gql, useMutation, useQuery } from "@apollo/client";
 const track = tracks[0];
+
+const insertFavouriteMutation = gql`
+  mutation MyMutation($userId: String!, $trackId: String!) {
+    insertFavorites(userid: $userId, trackid: $trackId) {
+      id
+      trackid
+      userid
+    }
+  }
+`;
+
+const isFavouriteQuery = gql`
+  query MyQuery($userId: String!, $trackId: String!) {
+    favoritesByTrackidAndUserid(trackid: $trackId, userid: $userId) {
+      id
+      trackid
+      userid
+    }
+  }
+`;
+
+const removeFavouriteMutation = gql`
+  mutation MyMutation($userId: String!, $trackId: String!) {
+    deleteFavorites(trackid: $trackId, userid: $userId) {
+      id
+      trackid
+      userid
+    }
+  }
+`;
 
 const Player = () => {
   const { track } = usePlayerContext();
   const [sound, setSound] = useState<Sound>();
   const [isPlaying, setIsPlaying] = useState<Boolean>(false);
   const [showFullScreen, setShowFullScreen] = useState<Boolean>(true);
+
+  const [insertFavorite] = useMutation(insertFavouriteMutation);
+  const [removeFavourite] = useMutation(removeFavouriteMutation);
+
+  const { data, refetch } = useQuery(isFavouriteQuery, {
+    variables: {
+      userId: "1",
+      trackId: track?.id || "",
+    },
+  });
+
+  const isLiked = data?.favoritesByTrackidAndUserid?.length > 0;
+
+  const onLike = async () => {
+    if (!track) {
+      return;
+    }
+    try {
+      if (isLiked) {
+        await removeFavourite({
+          variables: {
+            userId: "1",
+            trackId: track.id,
+          },
+        });
+      } else {
+        await insertFavorite({
+          variables: {
+            userId: "1",
+            trackId: track.id,
+          },
+        });
+      }
+      await refetch();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const onPlayPause = async () => {
     if (!sound) {
@@ -54,6 +123,7 @@ const Player = () => {
 
   useEffect(() => {
     playTrack();
+    refetch();
     Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     setShowFullScreen(true);
   }, [track]);
@@ -90,7 +160,8 @@ const Player = () => {
           </View>
 
           <Ionicons
-            name={"heart-outline"}
+            onPress={onLike}
+            name={isLiked ? "heart" : "heart-outline"}
             size={20}
             color={"white"}
             style={{ marginHorizontal: 10 }}

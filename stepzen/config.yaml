@@ -1,0 +1,8 @@
+configurationset:
+  - configuration:
+      name: postgresql_config
+      uri: postgresql://ep-small-unit-a5t2sr4p.us-east-2.aws.neon.tech/musicDb?user=musicDb_owner&password=d43IazvnAbMJ
+  - configuration:
+      name: auth_config
+      client_id: 9d52d5a9f0d34e7cbb2c08238692aeb4
+      client_secret: 26f0bd12ab6a431c946bdabbad0b568e
