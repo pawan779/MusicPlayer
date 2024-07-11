@@ -2,6 +2,7 @@ import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import { Text, View } from "@/src/components/Themed";
 import TrackListItem from "@/src/components/TrackListItem";
 import { gql, useQuery } from "@apollo/client";
+import Constants from "expo-constants";
 
 const query = gql`
   query MyQuery($genres: String!) {
@@ -51,7 +52,9 @@ export default function TabOneScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginTop: Constants.statusBarHeight,
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",

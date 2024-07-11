@@ -63,55 +63,56 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
             <Image source={{ uri: image.url }} style={styles.image} />
           </View>
         )}
-
-        <Text
-          numberOfLines={1}
-          ellipsizeMode="tail"
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            color: "#fff",
-            marginVertical: 5,
-          }}
-        >
-          {track.name}
-        </Text>
-        <View style={{ flexDirection: "row" }}>
-          {track.artists.map((item, index) => (
-            <Text
-              key={item.id}
-              style={{ color: colors.subTitle, fontSize: 12 }}
-            >
-              {item.name}
-              {index !== track.artists.length - 1 && ", "}
-            </Text>
-          ))}
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 20,
-          }}
-        >
-          <Ionicons name="play-skip-back" size={30} color={colors.text} />
+        <View>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "#fff",
+              marginVertical: 5,
+            }}
+          >
+            {track.name}
+          </Text>
+          <View style={{ flexDirection: "row" }}>
+            {track.artists.map((item, index) => (
+              <Text
+                key={item.id}
+                style={{ color: colors.subTitle, fontSize: 12 }}
+              >
+                {item.name}
+                {index !== track.artists.length - 1 && ", "}
+              </Text>
+            ))}
+          </View>
 
           <View
             style={{
-              backgroundColor: colors.text,
-              width: 60,
-              height: 60,
+              flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 30,
-              marginHorizontal: 30,
+              marginVertical: 20,
             }}
           >
-            <Ionicons name="play" size={35} color={colors.background} />
+            <Ionicons name="play-skip-back" size={30} color={colors.text} />
+
+            <View
+              style={{
+                backgroundColor: colors.text,
+                width: 60,
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 30,
+                marginHorizontal: 30,
+              }}
+            >
+              <Ionicons name="play" size={35} color={colors.background} />
+            </View>
+            <Ionicons name="play-skip-forward" size={35} color={colors.text} />
           </View>
-          <Ionicons name="play-skip-forward" size={35} color={colors.text} />
         </View>
       </SafeAreaView>
     </LinearGradient>
