@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import {
   Image,
   ImageBackground,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
@@ -14,15 +15,28 @@ import { usePlayerContext } from "../providers/PlayerProvider";
 import { Track } from "../types";
 import Constants from "expo-constants";
 import { LinearGradient } from "expo-linear-gradient";
+import MusicSLider from "./Slider";
+import { Sound } from "expo-av/build/Audio";
+import { AVPlaybackStatus } from "expo-av";
 
 type FullScreenPlayerProps = {
   track: Track;
   onPlayerPress: () => void;
+  sound: Sound;
+  setSound: () => void;
+  status: AVPlaybackStatus;
+  onPlayPause: () => void;
+  isPlaying: boolean;
 };
 
 const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
   track,
   onPlayerPress,
+  sound,
+  setSound,
+  status,
+  onPlayPause,
+  isPlaying,
 }) => {
   const { colors } = useTheme();
   const styles = makeStyles(colors);
@@ -87,7 +101,7 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
               </Text>
             ))}
           </View>
-
+          <MusicSLider sound={sound} setSound={setSound} status={status} />
           <View
             style={{
               flexDirection: "row",
@@ -98,7 +112,8 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
           >
             <Ionicons name="play-skip-back" size={30} color={colors.text} />
 
-            <View
+            <Pressable
+              onPress={onPlayPause}
               style={{
                 backgroundColor: colors.text,
                 width: 60,
@@ -109,8 +124,13 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
                 marginHorizontal: 30,
               }}
             >
-              <Ionicons name="play" size={35} color={colors.background} />
-            </View>
+              <Ionicons
+                disabled={!track?.preview_url}
+                name={isPlaying ? "pause" : "play"}
+                size={35}
+                color={colors.background}
+              />
+            </Pressable>
             <Ionicons name="play-skip-forward" size={35} color={colors.text} />
           </View>
         </View>

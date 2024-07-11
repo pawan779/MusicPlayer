@@ -44,6 +44,7 @@ const Player = () => {
   const [sound, setSound] = useState<Sound>();
   const [isPlaying, setIsPlaying] = useState<Boolean>(false);
   const [showFullScreen, setShowFullScreen] = useState<Boolean>(true);
+  const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
 
   const [insertFavorite] = useMutation(insertFavouriteMutation);
   const [removeFavourite] = useMutation(removeFavouriteMutation);
@@ -99,6 +100,9 @@ const Player = () => {
     if (!status.isLoaded) {
       return;
     }
+
+    console.log(status);
+    setStatus(status);
     setIsPlaying(status.isPlaying);
   };
 
@@ -116,6 +120,7 @@ const Player = () => {
     });
 
     setSound(newSound);
+
     newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
 
     await newSound.playAsync();
@@ -149,7 +154,15 @@ const Player = () => {
       }}
     >
       {showFullScreen ? (
-        <FullScreenPlayer track={track} onPlayerPress={onPlayerPress} />
+        <FullScreenPlayer
+          track={track}
+          onPlayerPress={onPlayerPress}
+          onPlayPause={onPlayPause}
+          isPlaying={isPlaying}
+          sound={sound}
+          setSound={setSound}
+          status={status}
+        />
       ) : (
         <Pressable style={styles.player} onPress={onPlayerPress}>
           {image && <Image source={{ uri: image.url }} style={styles.image} />}
